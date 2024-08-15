@@ -1,4 +1,5 @@
 import re
+import os
 import argparse
 from typing import TypeVar, Optional
 import pandas as pd
@@ -136,16 +137,22 @@ def export_data(data: pd.DataFrame, file_path: str) -> None:
 
 def clean_data(region:str) -> None:
     """
-    Processes the input data, by formating and filtering 
+    Processes the input data, by formatting and filtering
     the original DataFrame and processing columns.
     """
-    data = read_data('data/eu_life_expectancy_raw.tsv')
+    # Get the directory where this script is located
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    # Construct the full path to the data file
+    data_file_path = os.path.join(base_dir, 'data', 'eu_life_expectancy_raw.tsv')
+    data = read_data(data_file_path)
+    
     new_data = process_data(data)
     new_data = clean_year_column(new_data)
     new_data = clean_value_colum(new_data)
     new_data = filter_data_by_region(new_data, region)
     
-    export_data(new_data, f'data/{region.lower()}_life_expectancy.csv')
+    output_file_path = os.path.join(base_dir, 'data', f'{region.lower()}_life_expectancy.csv')
+    export_data(new_data, output_file_path)
 
 
 if __name__ == "__main__": # pragma: no cover
