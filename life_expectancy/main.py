@@ -5,7 +5,8 @@ from life_expectancy.save_data import save_data
 from life_expectancy.data_structures import RegionNotFoundError
 
 
-def run_all_functions(region: str, input_folder_path: str, input_filename: str, output_folder_path: str, output_filename: str):
+def run_all_functions(region: str, input_folder_path: str, input_filename: str, 
+                      output_folder_path: str, output_filename: str):
     """Handles the main data processing steps: loading, cleaning, and saving."""
     raw_data = load_data(input_folder_path, input_filename)
 
@@ -27,7 +28,8 @@ def main():
         output_folder_path = 'data'
         output_filename = f'{args.region.lower()}_life_expectancy.csv'
 
-        run_all_functions(args.region, input_folder_path, input_filename, output_folder_path, output_filename)
+        run_all_functions(args.region, input_folder_path, input_filename, output_folder_path,
+                           output_filename)
     except RegionNotFoundError as e:
         print(e)
 
