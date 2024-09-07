@@ -1,6 +1,3 @@
-[![CI Pipeline](https://github.com/MAlexandraOliveira/lp-assignments/actions/workflows/ci.yml/badge.svg)](https://github.com/MAlexandraOliveira/lp-assignments/actions/workflows/ci.yml)
-
-
 # Foundations Learning Path Assignments
 
 ## Introduction
