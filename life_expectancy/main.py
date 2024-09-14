@@ -6,7 +6,8 @@ from life_expectancy.save_data import save_data
 from life_expectancy.data_structures import Region
 
 
-def run_all_functions(region: Region, raw_data: pd.DataFrame, output_folder_path: str, output_filename: str):
+def run_all_functions(region: Region, raw_data: pd.DataFrame, output_folder_path: str, 
+                      output_filename: str):
     """Handles the main data processing steps: loading, cleaning, and saving."""
     cleaned_data = clean_data(raw_data, region)
     save_data(cleaned_data, output_folder_path, output_filename)
