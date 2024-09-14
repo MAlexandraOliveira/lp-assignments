@@ -1,7 +1,7 @@
-import pandas as pd
-from dataclasses import dataclass
 from enum import Enum
 from typing import List
+from dataclasses import dataclass
+import pandas as pd
 
 
 @dataclass
@@ -50,8 +50,8 @@ class Region(Enum):
             unique_regions = raw_data['Region'].unique().tolist()
 
             return unique_regions
-        else:
-            raise ValueError("The raw data provided is None or empty. Cannot generate regions.")
+
+        raise ValueError("The raw data provided is None or empty. Cannot generate regions.")
 
     @staticmethod
     def get_actual_countries(raw_data: pd.DataFrame) -> List[str]:
@@ -91,5 +91,3 @@ class Region(Enum):
         unique_regions = Region.get_unique_regions_from_raw_data(raw_data)
         
         return Enum('Region', {value.upper(): value for value in unique_regions})
-
-

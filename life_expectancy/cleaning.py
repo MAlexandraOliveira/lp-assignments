@@ -90,4 +90,3 @@ def clean_data(data: pd.DataFrame, region: Region) -> pd.DataFrame:
     final_data = filter_data_by_region(transformed_data_value_cleaned, region)
 
     return final_data
-
