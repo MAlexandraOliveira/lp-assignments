@@ -1,10 +1,9 @@
 import re
-from typing import TypeVar
+from typing import Union
 import pandas as pd
-from life_expectancy.data_structures import CombinedColumn, RegionNotFoundError
+from life_expectancy.data_structures import CombinedColumn, Region
 
-
-Choosable = TypeVar("Choosable", str, int, float, bool, object)
+Choosable = Union[str, int, float, bool, object]  
 
 
 def split_combined_column(data: pd.DataFrame) -> pd.DataFrame:
@@ -43,16 +42,11 @@ def transform_data(data: pd.DataFrame) -> pd.DataFrame:
     return new_data
 
 
-def change_column_type(data: pd.DataFrame, column_name: str, data_type: Choosable) -> pd.Series:
-    """Casts a given column to a given data type."""
-    return data[column_name].astype(data_type)
-
-
 def clean_year_column(data: pd.DataFrame) -> pd.DataFrame:
     """Processes the 'year' column by performing a set of operations."""
     data['year'] = data['year'].str.strip()
     filtered_data = data[data['year'].str.isnumeric()]
-    filtered_data['year'] = change_column_type(filtered_data, 'year', int)
+    filtered_data['year'] = filtered_data['year'].astype(int)
     
     return filtered_data
 
@@ -64,15 +58,15 @@ def remove_non_numeric_characters_from_column(data: pd.DataFrame, column_name: s
 
 def clean_value_column(data: pd.DataFrame) -> pd.DataFrame:
     """Processes the 'value' column by performing a set of operations."""
-    data['value'] = remove_non_numeric_characters_from_column(data, 'value')
-    data['value'] = pd.to_numeric(data['value'], errors='coerce')
+    data.loc[:, 'value'] = remove_non_numeric_characters_from_column(data, 'value')
+    data.loc[:, 'value'] = pd.to_numeric(data['value'], errors='coerce')
     filtered_data = data.dropna(subset=['value']).reset_index(drop=True)
-    filtered_data['value'] = change_column_type(filtered_data, 'value', float)
+    filtered_data['value'] = filtered_data['value'].astype(float)
     
     return filtered_data
 
 
-def filter_data_by_region(data: pd.DataFrame, region: str) -> pd.DataFrame:
+def filter_data_by_region(data: pd.DataFrame, region: Region) -> pd.DataFrame:
     """
     Filters the DataFrame by a given region.
     Raises a RegionNotFoundError if the region does not exist in the data.
@@ -81,15 +75,11 @@ def filter_data_by_region(data: pd.DataFrame, region: str) -> pd.DataFrame:
     >>> filtered_data = filter_data_by_region(data, 'PT')
     """
     filtered_data = data[data['region'] == region]
-
-    if filtered_data.empty:
-        valid_regions = data['region'].unique().tolist()
-        raise RegionNotFoundError(region, valid_regions)
-
+        
     return filtered_data.reset_index(drop=True)
+    
 
-
-def clean_data(data: pd.DataFrame, region: str) -> pd.DataFrame:
+def clean_data(data: pd.DataFrame, region: Region) -> pd.DataFrame:
     """
     Cleans the input data by transforming and filtering the original DataFrame 
     and processing its columns.
@@ -101,9 +91,3 @@ def clean_data(data: pd.DataFrame, region: str) -> pd.DataFrame:
 
     return final_data
 
-
-if __name__ == "__main__":  # pragma: no cover
-    raw_data = pd.read_csv('data/eu_life_expectancy_raw.tsv', sep='\t')
-    cleaned_data = clean_data(raw_data, 'PT')
-
-   
