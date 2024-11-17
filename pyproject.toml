@@ -30,5 +30,8 @@ fail_under = 80
 [tool.pylint."messages control"]
 disable = [
    "missing-module-docstring",
-   "C0303"
+   "C0303",
+   "unnecessary-pass",
+   "too-few-public-methods",
+    "unnecessary-ellipsis"
 ]
